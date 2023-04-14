@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>{% block title %}{% endblock %}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" href="/static/assets/dist/css/adminx.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
+
+  </head>
+  <body>
+    <div class="adminx-container">
+      {% include 'includes/navbar.html' %}
+      {% include 'includes/menu.html' %}
+     
+      {% block content %}
+      {% endblock%}
+      
+        
+    <script src="/static/assets/dist/js/jquery-3.2.1.min.js"></script>
+    <script src="/static/assets/dist/js/popper.min.js"></script>
+   
+    <script src="/static/assets/dist/js/bootstrap.min.js"></script> 
+    <script src="/static/assets/dist/js/vendor.js"></script>
+    <script src="/static/assets/dist/js/adminx.js"></script>
+    <script src="/static/assets/dist/js/jquery.dataTables.min.js"></script>
+
+
+    {% block javascripts %}
+    {% endblock javascripts %}
+
+
+
+  </body>
