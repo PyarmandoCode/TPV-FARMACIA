@@ -16,6 +16,7 @@ class Categorias(models.Model):
         verbose_name_plural = 'Categorias'
         ordering = ['id']
         db_table = 'Categorias'
+         
 
 class Tipo_Proveedor(models.Model):
     tip_prov = models.CharField(max_length=120)
@@ -114,6 +115,7 @@ class Productos(models.Model):
         verbose_name_plural = 'Productos'
         ordering = ['id']
         db_table = 'Productos'
+        
      
 
 
