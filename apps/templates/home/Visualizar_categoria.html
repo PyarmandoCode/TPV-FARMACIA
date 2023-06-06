@@ -1,5 +1,5 @@
 {% extends 'layouts/base.html' %}
-{% block title %} Agregar Categorias {% endblock %} 
+{% block title %} Editar Categoria {% endblock %} 
 
 {% block content %}
 
@@ -15,7 +15,7 @@
       </nav>
 
       <div class="pb-3">          
-        <h1>Agregar Categorias</h1>
+        <h1>Editar Categorias</h1>
       </div>
 
       <div class="row">
@@ -24,7 +24,7 @@
             <div
               class="card-header d-flex justify-content-between align-items-center"
             >
-              <div class="card-header-title">Ingrese la Nueva Categoria</div>
+              <div class="card-header-title">Datos de la Categoria</div>
 
               <nav class="card-header-actions">
                 <a
@@ -65,27 +65,27 @@
                 </a>
               </nav>
             </div>
-            <div class="card-body collapse show" id="card1">       
-               <form class="forms-sample" id="formcategoria" method="POST">{% csrf_token %} 
+            <div class="card-body collapse show" id="card1">  
+                <form class="forms-sample" id="formeditcategoria" method="POST">{% csrf_token %}      
                 <div class="form-group">
                   <label class="form-label" for="txtnomcat"
                     >Nombre Categoria</label
                   >
-                  <input class="form-control mb-2" type="text"  id="txtnomcat"  required>
+                  <input class="form-control mb-2" type="text"  id="txtnomcat" name="txtnomcat" value="{{categorias.nom_cat}}" required>
                 </div>
 
                 <div class="form-group">
-                  <label class="form-label" for="txtdescripcion">Descripcion</label>
-                  <textarea class="form-control" id="txtdescripcion" rows="3"></textarea>
+                  <label class="form-label" for="txtdescripcion" >Descripcion</label>
+                  <textarea class="form-control" id="txtdescripcion" name="txtdescripcion" rows="3">{{categorias.des_cat}}</textarea>
                 </div>
 
                 <div class="form-group">
                   <label class="form-label" for="cmbcolor">Color</label>
                   <select class="form-control" id="cmbcolor">
-                    <option  value="" selected="selected">---SELECCIONE---</option>
-                      {% for item in Colores %}
-                          <option value="{{item.id}}">{{item.nom_color}}</option>
-                      {% endfor %}
+                    <option  value="" selected="selected">{{colorseleccionado}}</option>
+                    {% for item in Colores %}
+                        <option value="{{item.id}}">{{item.nom_color}}</option>
+                    {% endfor %}
                   </select>
                 </div>
 
@@ -95,11 +95,14 @@
                   </div>
                   <div class="card-body">
                     <div class="custom-file">
-                      <input type="file" class="custom-file-input" id="imgcat" name="imgcat">
+                      <input type="file" class="custom-file-input" id="customFile">
                       <label class="custom-file-label" for="customFile">Seleccione la Imagen</label>
-                      
                     </div>
+                    
                   </div>
+                  {% if categorias.img_cat %} 
+                   <img src={{categorias.img_cat.url}} width=50% />
+                  {% endif %} 
                 </div>
 
                 <div class="form-group">
@@ -114,7 +117,9 @@
                     >
                   </div>
                 </div>
-                <button type="submit"   class="btn btn-primary">Grabar</button>
+
+                <button type="submit"  class="btn btn-icon btn-info">Grabar</button>
+
               </form>
             </div>
           </div>
@@ -125,49 +130,51 @@
 {% block javascripts %}
 
 
+
 <script>
-  var formData = new FormData();
-  $("#formcategoria").submit(function (e) {
-      e.preventDefault();
-      var img_categoria = $('#imgcat').prop("files")[0];
-      formData.append('txtnomcat', $('#txtnomcat').val())
-      formData.append('txtdescripcion',$('#txtdescripcion').val())
-      formData.append('cmbcolor',$('#cmbcolor').val())
-      formData.append('action','registrar_categoria')
-      formData.append('imgcat',img_categoria)
-      formData.append('csrfmiddlewaretoken', '{{ csrf_token }}')
-      $.ajax({
-          type: 'POST',
-          url: '{% url "home:registrar_categoria" %}',
-          data: formData,
-          cache: false,
-          processData: false,
-          contentType: false,
-          enctype: 'multipart/form-data',
-          success: function (json) {
-              if (json.flag) {
-                  Swal.fire(
-                      'Felicitaciones',
-                      json.msg,
-                      'success'
-                      ).then(() => {
-                        window.location.href = '/listado_categorias';  
-                        });
-              } else {
-                  Swal.fire(
-                      'ERROR',
-                      json.msg,
-                      'error'
-                      
-                  )
-              }
-          },
-          error: function (response) {
-              console.log(response)
-          }
-      });
-  });
-</script> 
+    var formData = new FormData();
+    $("#formeditcategoria").submit(function (e) {
+        e.preventDefault();
+        formData.append('txtnomcat', $('#txtnomcat').val())
+        formData.append('txtdescripcion',$('#txtdescripcion').val())
+        formData.append('cmbcolor',$('#cmbcolor').val())
+        formData.append('action','actualizar_categoria')
+        formData.append('id',{{categorias.id}})
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}')
+        $.ajax({
+            type: 'POST',
+            url: '{% url "home:categoria_actualizar" %}',
+            data: formData,
+            cache: false,
+            processData: false,
+            contentType: false,
+            enctype: 'multipart/form-data',
+            success: function (json) {
+                if (json.flag) {
+                    Swal.fire(
+                        'Felicitaciones',
+                        json.msg,
+                        'success'
+                    ).then(() => {
+                      window.location.href = '/listado_categorias';  
+                      });
+                } else {
+                    Swal.fire(
+                        'ERROR',
+                        json.msg,
+                        'error'
+                        
+                    )
+                }
+            },
+            error: function (response) {
+                console.log(response)
+            }
+        });
+    });
+  </script> 
+  
+
 
 {% endblock javascripts %}
 

@@ -4,8 +4,10 @@ from django.db import models
 class Categorias(models.Model):
     nom_cat = models.CharField(max_length=120)
     des_cat=models.TextField(blank=True,null=True)
-    color_cat = models.CharField(max_length=60,blank=True,null=True)
-    img_cat = models.CharField(max_length=90,blank=True,null=True)
+    color_cat = models.ForeignKey("Color",on_delete=models.CASCADE)
+    #img_cat = models.CharField(max_length=90,blank=True,null=True)
+    #img_cat = models.ImageField(null=True, blank=True)
+    img_cat = models.ImageField(upload_to='categorias/', null=True, blank=True)
     est_cat = models.BooleanField(default=True)
 
     def __str__(self):
@@ -58,6 +60,7 @@ class Marca(models.Model):
     nom_marca = models.CharField(max_length=120)
     des_marca=models.TextField(blank=True,null=True)
     img_marca = models.CharField(max_length=90,blank=True,null=True)
+    
     est_marca = models.BooleanField(default=True)
 
     def __str__(self):
@@ -82,7 +85,21 @@ class Presentacion(models.Model):
         verbose_name = 'Presentacion'
         verbose_name_plural = 'Presentacion'
         ordering = ['id']
-        db_table = 'Presentacion'         
+        db_table = 'Presentacion'        
+
+
+class Color(models.Model):
+    nom_color = models.CharField(max_length=120)
+    est_color = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.nom_color
+    
+    class Meta:
+        verbose_name = 'Color'
+        verbose_name_plural = 'Color'
+        ordering = ['id']
+        db_table = 'Color'         
     
 class Productos(models.Model):
      nom_prod = models.CharField(max_length=120)
@@ -91,7 +108,7 @@ class Productos(models.Model):
      des_prod=models.TextField(blank=True,null=True)
      umedida_prod=models.CharField(max_length=120)
      ubicacion =models.CharField(max_length=120)
-     color_prod = models.CharField(max_length=60,blank=True,null=True)
+     color_prod =  models.ForeignKey("Color",on_delete=models.CASCADE)
      img_prod = models.CharField(max_length=90,blank=True,null=True)
      cat_prod=models.ForeignKey(Categorias,on_delete=models.CASCADE)
      prov_prod=models.ForeignKey(Proveedores,on_delete=models.CASCADE)

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Categorias,Tipo_Proveedor,Proveedores,Marca,Productos,Presentacion
+from .models import Categorias,Tipo_Proveedor,Proveedores,Marca,Productos,Presentacion,Color
 
 class CategoriaAdmin(admin.ModelAdmin):
     # con esto muestras los campos que deses al mostrar la lista en admin
@@ -32,5 +32,5 @@ class ProveedorAdmin(admin.ModelAdmin):
 
 admin.site.register(Proveedores, ProveedorAdmin)
 
-admin.site.register([Tipo_Proveedor,Marca,Presentacion])
+admin.site.register([Tipo_Proveedor,Marca,Presentacion,Color])
 

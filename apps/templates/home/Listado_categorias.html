@@ -19,7 +19,7 @@
         </nav>
         
         <div class="text-right">
-         <a href="{% url 'home:agregar_categoria' %}" class="btn btn-lg btn-labeled-right btn-success mr-2">
+         <a href="{% url 'home:agregar_categoria' %}" class="btn btn-lg btn-labeled-right btn-info mr-2">
             <span class="btn-label">
               <span class="oi oi-arrow-thick-right" aria-hidden="true"></span>
             </span>
@@ -39,38 +39,28 @@
                 <table class="table table-actions table-striped table-hover mb-0" id=datatable-categorias data-table>
                   <thead>
                     <tr>
-                     
-                      
                       <th scope="col">Codigo</th>
                       <th scope="col">Nombre</th>
                       <th scope="col">Descripcion</th>
                       <th scope="col">Color</th>
                       <th class="center">Opciones</th>
-                      
-                      
                     </tr>
                   </thead>
                   <tbody>
-                   
-
                   {% for item in Categorias %}  
-                    <tr>
-                      <td> {{ forloop.counter }} </td>
+                    <tr id="item-{{item.id}}">
+                      <td> {{ item.id }} </td>
                       <td>{{item.nom_cat}}</td>
                       <td>{{item.des_cat}}</td>
                       <td>{{item.color_cat}}</td>
                       <td>
-                        <a href="#" class="btn btn-icon btn-info mr-2">
+                        <a href="{% url 'home:categoria_visualizar' item.id %}" class="btn btn-icon btn-info mr-2">
                           <i data-feather="eye"></i>
                         </a>
 
-                        <a href="#" class="btn btn-icon btn-primary mr-2">
-                          <i data-feather="edit"></i>
-                        </a>
-
-                        <a href="#" class="btn btn-icon btn-danger mr-2 dt-delete">
+                        <button class="btn btn-icon btn-danger" onClick="deleteCategoria({{item.id}})">
                           <i data-feather="trash-2"></i>
-                        </a>
+                        </button>
                         
                       </td>
                     </tr>
@@ -84,79 +74,80 @@
       </div>
     </div>
   </div>
-  <!-- // Main Content -->
+  
 
   {% block javascripts %}
 
 <script>
-      $(document).ready(function() {
-        var table = $('[data-table]').DataTable({
-          language: {
-            "decimal": "",
-            "emptyTable": "No hay información",
-            "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
-            "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
-            "infoFiltered": "(Filtrado de _MAX_ total entradas)",
-            "infoPostFix": "",
-            "thousands": ",",
-            "lengthMenu": "Mostrar _MENU_ Entradas",
-            "loadingRecords": "Cargando...",
-            "processing": "Procesando...",
-            "search": "Buscar:",
-            "zeroRecords": "Sin resultados encontrados",
-            "paginate": {
-                "first": "Primero",
-                "last": "Ultimo",
-                "next": "Siguiente",
-                "previous": "Anterior"
-            }
-          },
-  
-          bLengthChange: true,
-          "iDisplayLength": 10,
-          bInfo: false,
-          responsive: true,
-          "bAutoWidth": false,
-          "columns": [
-            null,
-            null,
-            null,
-            null,
-            
-            { "orderable": false },
-            
-          ]
-          
-      });
+  $(document).ready(function() {
+    var table = $('[data-table]').DataTable({
+    language: {
+                "decimal": "",
+                "emptyTable": "No hay información",
+                "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+                "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                "infoPostFix": "",
+                "thousands": ",",
+                "lengthMenu": "Mostrar _MENU_ Entradas",
+                "loadingRecords": "Cargando...",
+                "processing": "Procesando...",
+                "search": "Buscar:",
+                "zeroRecords": "Sin resultados encontrados",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Ultimo",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                }
+              },
+              bLengthChange: true,
+              "iDisplayLength": 10,
+              bInfo: false,
+              responsive: true,
+              "bAutoWidth": false,
+              "columns": [
+                null,
+                null,
+                null,
+                null,
+                { "orderable": false },
+              ]
+          });
     });
-    </script> 
 
-    <script>
+function deleteCategoria(id) {
+      Swal
+        .fire({
+            title: "Desea Eliminar la Categoria?",
+            text: "Con codigo "+id,
+            icon: 'error',
+            showCancelButton: true,
+            confirmButtonText: "Sí, eliminar",
+            cancelButtonText: "Cancelar",
+        })
+        .then(resultado => {
+            if (resultado.value) {
+              $.ajax({
+                url: "{% url 'home:categoria_eliminar'  %}",
+                data: {
+                    'id': id,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.deleted) {
+                      $("#datatable-categorias #item-" + id).remove();
+                     }
+                    }
+                  });
+            
+            } else {
+                console.log("*NO se elimina la categoria*");
+            }   
+            })
+        }
+</script> 
 
+{% endblock javascripts %}
 
-      $('.dt-delete').each(function () {
-        $(this).on('click', function(evt){
-          $this = $(this);
-          var dtRow = $this.parents('tr');
-          if(confirm("Are you sure to delete this row?")){
-            var table = $('[data-table]').DataTable();
-            table.row(dtRow[0].rowIndex-1).remove().draw( false );
-          }
-        });
-      });
-
-      
-    //https://codepen.io/RedJokingInn/pen/zZyRmR
-   
-     
-
-       // var myTable = $('[data-table]');
-       // myTable.find( 'tbody tr:eq(0)' ).remove();
-       
-
-      
-
-  </script>
-
-  {% endblock javascripts %}
 {% endblock  %}

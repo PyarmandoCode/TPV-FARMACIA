@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'apps.home',
+    'sweetify',
 
 
 ]
@@ -119,7 +120,7 @@ WSGI_APPLICATION = 'tpv_py.wsgi.application'
 DATABASES = {
     'local': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'bd_tpv_py',
+        'NAME': 'tpv_bd_py',
         'USER': 'admin',
         'PASSWORD': 'admin',
         'HOST': 'localhost',
@@ -134,8 +135,6 @@ DATABASES = {
         'PORT': '5432',
     }
 }
-
-
 
 
 # Password validation
