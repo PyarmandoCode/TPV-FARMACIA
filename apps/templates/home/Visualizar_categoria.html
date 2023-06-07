@@ -95,13 +95,16 @@
                   </div>
                   <div class="card-body">
                     <div class="custom-file">
-                      <input type="file" class="custom-file-input" id="customFile">
+                      <input type="file" class="custom-file-input" id="imgcat" name="imgcat" onChange="img_pathUrl(this)">
                       <label class="custom-file-label" for="customFile">Seleccione la Imagen</label>
                     </div>
                     
                   </div>
                   {% if categorias.img_cat %} 
-                   <img src={{categorias.img_cat.url}} width=50% />
+                     <img src={{categorias.img_cat.url}} width=50%  id="img_url"/>
+                  {% else %} 
+                    <img src="https://res.cloudinary.com/dream-music/image/upload/v1686173754/team/no_image_mpxtqu.jpg" width=50%  id="img_url"/>   
+                    
                   {% endif %} 
                 </div>
 
@@ -129,16 +132,20 @@
 
 {% block javascripts %}
 
-
-
 <script>
     var formData = new FormData();
     $("#formeditcategoria").submit(function (e) {
         e.preventDefault();
+        var img_categoria = $('#imgcat').prop("files")[0];
         formData.append('txtnomcat', $('#txtnomcat').val())
         formData.append('txtdescripcion',$('#txtdescripcion').val())
         formData.append('cmbcolor',$('#cmbcolor').val())
         formData.append('action','actualizar_categoria')
+        if (img_categoria) 
+          {
+            formData.append('imgcat',img_categoria)
+          }
+
         formData.append('id',{{categorias.id}})
         formData.append('csrfmiddlewaretoken', '{{ csrf_token }}')
         $.ajax({
@@ -174,7 +181,13 @@
     });
   </script> 
   
+  {% comment %} <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> {% endcomment %}
 
+  <script>
+    function img_pathUrl(input){
+      $('#img_url')[0].src = (window.URL ? URL : webkitURL).createObjectURL(input.files[0]);
+    }
+  </script>
 
 {% endblock javascripts %}
 

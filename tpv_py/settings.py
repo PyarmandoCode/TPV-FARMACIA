@@ -118,7 +118,7 @@ WSGI_APPLICATION = 'tpv_py.wsgi.application'
 
 
 DATABASES = {
-    'local': {
+    'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'tpv_bd_py',
         'USER': 'admin',
@@ -126,7 +126,7 @@ DATABASES = {
         'HOST': 'localhost',
         'PORT': '5432',
     },
-    'default':{
+    'local':{
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'farmaciadb',
         'USER': 'farmaciadb_user',
@@ -174,16 +174,22 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 
-STATIC_ROOT = os.path.join(CORE_DIR, 'staticfiles')
-STATIC_URL = 'apps/static/'
+
 MEDIA_URL = 'media/'
 
-# Extra places for collectstatic to find static files.
+
 STATICFILES_DIRS = (
     os.path.join(CORE_DIR, 'apps/static'),
 )
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
+STATIC_URL = '/static/'
+#cuando estes en produccion coloc debug=false
+if DEBUG:
+    STATICFILES_DIRS = [
+        os.path.join(CORE_DIR, 'apps/static')
+    ]
+else:
+    STATIC_ROOT = os.path.join(CORE_DIR, 'apps/static')
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
