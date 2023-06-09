@@ -151,3 +151,14 @@ class DeleteCrudProveedores(View):
             'deleted': True
         }
         return JsonResponse(data)
+    
+
+
+def Proveedor_visualizar(request,id):
+    template_name = "home\\Visualizar_proveedor.html"
+    proveedor=Proveedores.objects.get(id=id)
+    tipo=Tipo_Proveedor.objects.filter(est_tip_prov=True)
+    
+    context = {"proveedor":proveedor,
+               "tipo":tipo}
+    return render(request, template_name,context)   

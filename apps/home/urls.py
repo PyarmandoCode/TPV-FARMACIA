@@ -1,4 +1,4 @@
-from .views import index,Categorias_listado,Categoria_form,CreateCrudCategorias,Categoria_visualizar,DeleteCrudCategorias,UpdateCrudCategorias,Proveedores_listado,Proveedor_form,CreateCrudProveedores,DeleteCrudProveedores
+from .views import index,Categorias_listado,Categoria_form,CreateCrudCategorias,Categoria_visualizar,DeleteCrudCategorias,UpdateCrudCategorias,Proveedores_listado,Proveedor_form,CreateCrudProveedores,DeleteCrudProveedores,Proveedor_visualizar
 from django.urls import path
 
 app_name = 'home'
@@ -15,4 +15,5 @@ urlpatterns = [
     path('agregar_proveedores/', Proveedor_form,name="agregar_proveedores"),
     path('registrar_proveedores/', CreateCrudProveedores,name="registrar_proveedores"),
     path('proveedor_eliminar', DeleteCrudProveedores.as_view(),name="proveedor_eliminar"),
+    path('proveedor_visualizar/<int:id>', Proveedor_visualizar,name="proveedor_visualizar"),
 ]
