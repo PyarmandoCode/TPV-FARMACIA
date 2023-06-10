@@ -128,10 +128,10 @@ DATABASES = {
     },
     'default':{
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'farmaciadb',
-        'USER': 'farmaciadb_user',
-        'PASSWORD': 'olUsf75hgip9OomxARUXcTQxtgHig0zq',
-        'HOST': 'dpg-cgsqod82qv2d7k1j8j90-a.oregon-postgres.render.com',
+        'NAME': 'farmaciadb_sefy',
+        'USER': 'farmaciadb_sefy_user',
+        'PASSWORD': '8qGsIfvkrbcumJQ7ATCthYQGlO7ItGAM',
+        'HOST': 'dpg-ci2b1he7avj2t33crot0-a.oregon-postgres.render.com',
         'PORT': '5432',
     }
 }
