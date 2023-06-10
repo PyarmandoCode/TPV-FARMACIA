@@ -57,7 +57,7 @@
                       <td>{{item.tel_prov}}</td>
                       <td>{{item.tipo_prov}}</td>
                       <td>
-                        <a href="" class="btn btn-icon btn-info mr-2">
+                        <a href="{% url 'home:proveedor_visualizar' item.id %}" class="btn btn-icon btn-info mr-2">
                           <i data-feather="eye"></i>
                         </a>
 

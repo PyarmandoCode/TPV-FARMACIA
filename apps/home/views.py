@@ -97,7 +97,6 @@ def UpdateCrudCategorias(request):
         return JsonResponse(response_data)   
     return render(request,template_name) 
 
-
             
 def Proveedores_listado(request):
     proveedores = Proveedores.objects.filter(est_prov=True)
@@ -158,7 +157,45 @@ def Proveedor_visualizar(request,id):
     template_name = "home\\Visualizar_proveedor.html"
     proveedor=Proveedores.objects.get(id=id)
     tipo=Tipo_Proveedor.objects.filter(est_tip_prov=True)
+
+    #Seleccionado el tipo para mostrarla en el Combo
+    tipos=Tipo_Proveedor.objects.get(id=proveedor.tipo_prov.id)
     
     context = {"proveedor":proveedor,
-               "tipo":tipo}
+               "tipo":tipo,"tiposeleccionado":tipos.tip_prov}
     return render(request, template_name,context)   
+
+
+def UpdateCrudProveedor(request):
+    response_data = {}
+    template_name="home\\Visualizar_proveedor.html"
+    if request.POST.get('action') =='actualizar_proveedor':
+        try:
+            id=request.POST.get('id')
+            proveedor = Proveedores.objects.get(id=id)
+            proveedor.nom_prov=request.POST.get('txtnom')
+            proveedor.des_prov=request.POST.get('txtdescripcion')
+            proveedor.dir_prov=request.POST.get('txtdir')
+            proveedor.doc_prov=request.POST.get('txtdoc')
+            proveedor.tlf_prov=request.POST.get('txtfono')
+            proveedor.email_prov=request.POST.get('txtemail')
+            proveedor.contacto_prov=request.POST.get('txtcontacto')
+            tipo_proveedor = request.POST.get('cmbtipo')
+            if tipo_proveedor=="":
+                tipo=proveedor.tipo_prov
+            else:
+                tipo=Tipo_Proveedor.objects.get(id=tipo_proveedor)
+                
+            proveedor.tipo_prov=tipo
+            proveedor.save()
+        except Exception as error:
+            response_data['flag'] = False
+            response_data['msg'] = f'No Se Modifico el Proveedor Correctamente {error}'
+        else:
+            response_data['flag'] = True
+            response_data['msg'] = 'Se Modifico con exito El Proveedor'  
+            
+             
+        return JsonResponse(response_data)   
+    return render(request,template_name) 
+

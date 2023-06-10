@@ -9,8 +9,8 @@
 
       <nav aria-label="breadcrumb" role="navigation">
         <ol class="breadcrumb adminx-page-breadcrumb">
-          <li class="breadcrumb-item"><a href="">Dashboard</a></li>
-          <li class="breadcrumb-item"><a href="">Proveedores</a></li>
+          <li class="breadcrumb-item"><a href="{% url 'home:index_home' %}">Dashboard</a></li>
+          <li class="breadcrumb-item"><a href="{% url 'home:listado_proveedores' %}">Proveedores</a></li>
         </ol>
       </nav>
 
@@ -59,56 +59,67 @@
               </nav>
             </div>
             <div class="card-body collapse show" id="card1">  
-                <form class="forms-sample" id="formeditcategoria" method="POST">{% csrf_token %}      
+                <form class="forms-sample" id="formeditproveedor" method="POST">{% csrf_token %}      
                 <div class="form-group">
-                  <label class="form-label" for="txtnomcat"
-                    >Nombre Categoria</label
-                  >
-                  <input class="form-control mb-2" type="text"  id="txtnomcat" name="txtnomcat" value="{{categorias.nom_cat}}" required>
+                  <label class="form-label" for="txtnom"
+                    >Nombre</label>
+                  <input class="form-control mb-2" type="text"  id="txtnom" name="txtnom" value="{{proveedor.nom_prov}}" required>
                 </div>
 
                 <div class="form-group">
                   <label class="form-label" for="txtdescripcion" >Descripcion</label>
-                  <textarea class="form-control" id="txtdescripcion" name="txtdescripcion" rows="3">{{categorias.des_cat}}</textarea>
+                  <textarea class="form-control" id="txtdescripcion" name="txtdescripcion" rows="3">{{proveedor.des_prov}}</textarea>
                 </div>
 
                 <div class="form-group">
-                  <label class="form-label" for="cmbcolor">Color</label>
-                  <select class="form-control" id="cmbcolor">
-                    <option  value="" selected="selected">{{colorseleccionado}}</option>
-                    {% for item in Colores %}
-                        <option value="{{item.id}}">{{item.nom_color}}</option>
-                    {% endfor %}
-                  </select>
-                </div>
-
-                <div class="card mb-grid">
-                  <div class="card-header">
-                    <b>Cargar la Imagen</b>
+                    <label class="form-label" for="txtdir"
+                      >Direccion</label>
+                    <input class="form-control mb-2" type="text"  id="txtdir" name="txtdir" value="{{proveedor.dir_prov}}" required>
                   </div>
-                  <div class="card-body">
-                    <div class="custom-file">
-                      <input type="file" class="custom-file-input" id="imgcat" name="imgcat" onChange="img_pathUrl(this)">
-                      <label class="custom-file-label" for="customFile">Seleccione la Imagen</label>
-                    </div>
-                    
-                  </div>
-                  {% if categorias.img_cat %} 
-                     <img src={{categorias.img_cat.url}} width=50%  id="img_url"/>
-                  {% else %} 
-                    <img src="https://res.cloudinary.com/dream-music/image/upload/v1686173754/team/no_image_mpxtqu.jpg" width=50%  id="img_url"/>   
-                    
-                  {% endif %} 
-                </div>
 
+                  <div class="form-group">
+                    <label class="form-label" for="txtdoc"
+                      >Documento</label>
+                    <input class="form-control mb-2" type="text"  id="txtdoc" name="txtdoc" value="{{proveedor.doc_prov}}" required>
+                  </div>  
+
+                  <div class="form-group">
+                    <label class="form-label" for="txtfono"
+                      >Telefono</label>
+                    <input class="form-control mb-2" type="text"  id="txtfono" name="txtfono" value="{{proveedor.tel_prov}}" required>
+                  </div> 
+
+                  <div class="form-group">
+                    <label class="form-label" for="txtemail"
+                      >Email</label>
+                    <input class="form-control mb-2" type="text"  id="txtemail" name="txtemail" value="{{proveedor.email_prov}}" required>
+                  </div> 
+
+                  <div class="form-group">
+                    <label class="form-label" for="txtcontacto"
+                      >Contacto</label>
+                    <input class="form-control mb-2" type="text"  id="txtcontacto" name="txtcontacto" value="{{proveedor.contacto_prov}}" required>
+                  </div> 
+
+                  <div class="form-group">
+                    <label class="form-label" for="cmbtipo">Tipo</label>
+                    <select class="form-control" id="cmbtipo">
+                      <option  value="" selected="selected">{{tiposeleccionado}}</option>
+                      {% for item in tipo %}
+                          <option value="{{item.id}}">{{item.tip_prov}}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+
+              
                 <div class="form-group">
                   <div class="custom-control custom-checkbox">
                     <input
                       type="checkbox"
                       class="custom-control-input"
-                      id="chkestadocat"
+                      id="chkestadoprov"
                     />
-                    <label class="custom-control-label" for="chkestadocat"
+                    <label class="custom-control-label" for="chkestadoprov"
                       >Activo</label
                     >
                   </div>
@@ -127,23 +138,22 @@
 
 <script>
     var formData = new FormData();
-    $("#formeditcategoria").submit(function (e) {
+    $("#formeditproveedor").submit(function (e) {
         e.preventDefault();
-        var img_categoria = $('#imgcat').prop("files")[0];
-        formData.append('txtnomcat', $('#txtnomcat').val())
+        formData.append('txtnom', $('#txtnom').val())
         formData.append('txtdescripcion',$('#txtdescripcion').val())
-        formData.append('cmbcolor',$('#cmbcolor').val())
-        formData.append('action','actualizar_categoria')
-        if (img_categoria) 
-          {
-            formData.append('imgcat',img_categoria)
-          }
-
-        formData.append('id',{{categorias.id}})
+        formData.append('txtdir',$('#txtdir').val())
+        formData.append('txtdoc',$('#txtdoc').val())
+        formData.append('txtfono',$('#txtfono').val())
+        formData.append('txtemail',$('#txtemail').val())
+        formData.append('txtcontacto',$('#txtcontacto').val())
+        formData.append('cmbtipo',$('#cmbtipo').val())
+        formData.append('action','actualizar_proveedor')
+        formData.append('id',{{proveedor.id}})
         formData.append('csrfmiddlewaretoken', '{{ csrf_token }}')
         $.ajax({
             type: 'POST',
-            url: '{% url "home:categoria_actualizar" %}',
+            url: '{% url "home:proveedor_actualizar" %}',
             data: formData,
             cache: false,
             processData: false,
@@ -156,7 +166,7 @@
                         json.msg,
                         'success'
                     ).then(() => {
-                      window.location.href = '/listado_categorias';  
+                      window.location.href = '/listado_proveedores';  
                       });
                 } else {
                     Swal.fire(
@@ -174,13 +184,7 @@
     });
   </script> 
   
-  {% comment %} <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> {% endcomment %}
 
-  <script>
-    function img_pathUrl(input){
-      $('#img_url')[0].src = (window.URL ? URL : webkitURL).createObjectURL(input.files[0]);
-    }
-  </script>
 
 {% endblock javascripts %}
 
