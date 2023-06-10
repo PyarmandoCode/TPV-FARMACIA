@@ -4,7 +4,7 @@ from django.http import JsonResponse
 from django.views.generic import  View
 
 def index(request):
-    template_name = "home\Index.html"
+    template_name = "home\\Index.html"
     return render(request, template_name)
 
 def Categorias_listado(request):
