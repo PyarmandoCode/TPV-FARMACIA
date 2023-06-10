@@ -92,7 +92,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'tpv_py.urls'
 
-TEMPLATE_DIR = os.path.join(BASE_DIR, "apps/templates")
+# TEMPLATE_DIR = os.path.join(BASE_DIR, "apps/templates")
 
 TEMPLATES = [
     {

@@ -12,11 +12,11 @@ def Categorias_listado(request):
     context = {
         "Categorias": categorias,
     }
-    template_name = "home\\Listado_categorias.html"
+    template_name = "Listado_categorias.html"
     return render(request, template_name, context)
 
 def Categoria_visualizar(request,id):
-    template_name = "home\\Visualizar_categoria.html"
+    template_name = "Visualizar_categoria.html"
     categoria=Categorias.objects.get(id=id)
     color=Color.objects.filter(est_color=True)
 
@@ -42,12 +42,12 @@ def Categoria_form(request):
     context = {
         "Colores":color
     }
-    template_name = "home\\Nueva_categoria.html"
+    template_name = "Nueva_categoria.html"
     return render(request, template_name,context)
 
 def CreateCrudCategorias(request):
     response_data = {}
-    template_name="home\\Nueva_categoria.html"
+    template_name="Nueva_categoria.html"
     if request.POST.get('action') =='registrar_categoria':
         try:
             nombre_categoria = request.POST.get('txtnomcat')
@@ -69,7 +69,7 @@ def CreateCrudCategorias(request):
 
 def UpdateCrudCategorias(request):
     response_data = {}
-    template_name="home\\Visualizar_categoria.html"
+    template_name="Visualizar_categoria.html"
     if request.POST.get('action') =='actualizar_categoria':
         try:
             id=request.POST.get('id')
@@ -103,7 +103,7 @@ def Proveedores_listado(request):
     context = {
         "Proveedores": proveedores,
     }
-    template_name = "home\\Listado_proveedores.html"
+    template_name = "Listado_proveedores.html"
     return render(request, template_name, context)
 
 
@@ -112,13 +112,13 @@ def Proveedor_form(request):
     context = {
         "Tipo":tipo
     }
-    template_name = "home\\Nuevo_proveedor.html"
+    template_name = "Nuevo_proveedor.html"
     return render(request, template_name,context)
 
 
 def CreateCrudProveedores(request):
     response_data = {}
-    template_name="home\\Nuevo_proveedor.html"
+    template_name="Nuevo_proveedor.html"
     if request.POST.get('action') =='registrar_proveedor':
         try:
             nombre_proveedor = request.POST.get('txtnomprov')
@@ -154,7 +154,7 @@ class DeleteCrudProveedores(View):
 
 
 def Proveedor_visualizar(request,id):
-    template_name = "home\\Visualizar_proveedor.html"
+    template_name = "Visualizar_proveedor.html"
     proveedor=Proveedores.objects.get(id=id)
     tipo=Tipo_Proveedor.objects.filter(est_tip_prov=True)
 
@@ -168,7 +168,7 @@ def Proveedor_visualizar(request,id):
 
 def UpdateCrudProveedor(request):
     response_data = {}
-    template_name="home\\Visualizar_proveedor.html"
+    template_name="Visualizar_proveedor.html"
     if request.POST.get('action') =='actualizar_proveedor':
         try:
             id=request.POST.get('id')
