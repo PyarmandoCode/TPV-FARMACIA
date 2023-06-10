@@ -118,7 +118,7 @@ WSGI_APPLICATION = 'tpv_py.wsgi.application'
 
 
 DATABASES = {
-    'default': {
+    'local': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'tpv_bd_py',
         'USER': 'admin',
@@ -126,7 +126,7 @@ DATABASES = {
         'HOST': 'localhost',
         'PORT': '5432',
     },
-    'local':{
+    'default':{
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'farmaciadb',
         'USER': 'farmaciadb_user',
