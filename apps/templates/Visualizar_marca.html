@@ -1,5 +1,5 @@
 {% extends 'layouts/base.html' %}
-{% block title %} Editar Proveedor {% endblock %} 
+{% block title %} Editar Marca {% endblock %} 
 
 {% block content %}
 
@@ -10,12 +10,12 @@
       <nav aria-label="breadcrumb" role="navigation">
         <ol class="breadcrumb adminx-page-breadcrumb">
           <li class="breadcrumb-item"><a href="{% url 'home:index_home' %}">Dashboard</a></li>
-          <li class="breadcrumb-item"><a href="{% url 'home:listado_proveedores' %}">Proveedores</a></li>
+          <li class="breadcrumb-item"><a href="{% url 'home:listado_marca' %}">Marca</a></li>
         </ol>
       </nav>
 
       <div class="pb-3">          
-        <h1>Editar Proveedores</h1>
+        <h1>Editar Marca</h1>
       </div>
 
       <div class="row">
@@ -24,7 +24,7 @@
             <div
               class="card-header d-flex justify-content-between align-items-center"
             >
-              <div class="card-header-title">Datos del Proveedor</div>
+              <div class="card-header-title">Datos de la Marca</div>
 
               <nav class="card-header-actions">
                 <a
@@ -59,67 +59,46 @@
               </nav>
             </div>
             <div class="card-body collapse show" id="card1">  
-                <form class="forms-sample" id="formeditproveedor" method="POST">{% csrf_token %}      
+                <form class="forms-sample" id="formeditmarca" method="POST">{% csrf_token %}      
                 <div class="form-group">
-                  <label class="form-label" for="txtnom"
-                    >Nombre</label>
-                  <input class="form-control mb-2" type="text"  id="txtnom" name="txtnom" value="{{proveedor.nom_prov}}" required>
+                  <label class="form-label" for="txtnom_mar"
+                    >Nombre Marca</label
+                  >
+                  <input class="form-control mb-2" type="text"  id="txtnom_mar" name="txtnom_mar" value="{{marca.nom_marca}}" required>
                 </div>
 
                 <div class="form-group">
                   <label class="form-label" for="txtdescripcion" >Descripcion</label>
-                  <textarea class="form-control" id="txtdescripcion" name="txtdescripcion" rows="3">{{proveedor.des_prov}}</textarea>
+                  <textarea class="form-control" id="txtdescripcion" name="txtdescripcion" rows="3">{{marca.des_marca}}</textarea>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label" for="txtdir"
-                      >Direccion</label>
-                    <input class="form-control mb-2" type="text"  id="txtdir" name="txtdir" value="{{proveedor.dir_prov}}" required>
+                <div class="card mb-grid">
+                  <div class="card-header">
+                    <b>Cargar la Imagen</b>
                   </div>
-
-                  <div class="form-group">
-                    <label class="form-label" for="txtdoc"
-                      >Documento</label>
-                    <input class="form-control mb-2" type="text"  id="txtdoc" name="txtdoc" value="{{proveedor.doc_prov}}" required>
-                  </div>  
-
-                  <div class="form-group">
-                    <label class="form-label" for="txtfono"
-                      >Telefono</label>
-                    <input class="form-control mb-2" type="text"  id="txtfono" name="txtfono" value="{{proveedor.tel_prov}}" required>
-                  </div> 
-
-                  <div class="form-group">
-                    <label class="form-label" for="txtemail"
-                      >Email</label>
-                    <input class="form-control mb-2" type="text"  id="txtemail" name="txtemail" value="{{proveedor.email_prov}}" required>
-                  </div> 
-
-                  <div class="form-group">
-                    <label class="form-label" for="txtcontacto"
-                      >Contacto</label>
-                    <input class="form-control mb-2" type="text"  id="txtcontacto" name="txtcontacto" value="{{proveedor.contacto_prov}}" required>
-                  </div> 
-
-                  <div class="form-group">
-                    <label class="form-label" for="cmbtipo">Tipo</label>
-                    <select class="form-control" id="cmbtipo">
-                      <option  value="" selected="selected">{{tiposeleccionado}}</option>
-                      {% for item in tipo %}
-                          <option value="{{item.id}}">{{item.tip_prov}}</option>
-                      {% endfor %}
-                    </select>
+                  <div class="card-body">
+                    <div class="custom-file">
+                      <input type="file" class="custom-file-input" id="imgmarca" name="imgmarca" onChange="img_pathUrl(this)">
+                      <label class="custom-file-label" for="customFile">Seleccione la Imagen</label>
+                    </div>
+                    
                   </div>
+                  {% if marca.img_marca %} 
+                     <img src={{marca.img_marca.url}} width=50%  id="img_url"/>
+                  {% else %} 
+                    <img src="https://res.cloudinary.com/dream-music/image/upload/v1686173754/team/no_image_mpxtqu.jpg" width=50%  id="img_url"/>   
+                    
+                  {% endif %} 
+                </div>
 
-              
                 <div class="form-group">
                   <div class="custom-control custom-checkbox">
                     <input
                       type="checkbox"
                       class="custom-control-input"
-                      id="chkestadoprov"
+                      id="chkestadomarca"
                     />
-                    <label class="custom-control-label" for="chkestadoprov"
+                    <label class="custom-control-label" for="chkestadomarca"
                       >Activo</label
                     >
                   </div>
@@ -138,22 +117,22 @@
 
 <script>
     var formData = new FormData();
-    $("#formeditproveedor").submit(function (e) {
+    $("#formeditmarca").submit(function (e) {
         e.preventDefault();
-        formData.append('txtnom', $('#txtnom').val())
+        var img_marca = $('#imgmarca').prop("files")[0];
+        formData.append('txtnom_mar', $('#txtnom_mar').val())
         formData.append('txtdescripcion',$('#txtdescripcion').val())
-        formData.append('txtdir',$('#txtdir').val())
-        formData.append('txtdoc',$('#txtdoc').val())
-        formData.append('txtfono',$('#txtfono').val())
-        formData.append('txtemail',$('#txtemail').val())
-        formData.append('txtcontacto',$('#txtcontacto').val())
-        formData.append('cmbtipo',$('#cmbtipo').val())
-        formData.append('action','actualizar_proveedor')
-        formData.append('id',{{proveedor.id}})
+        formData.append('action','actualizar_marca')
+        if (img_marca) 
+          {
+            formData.append('imgmarca',img_marca)
+          }
+
+        formData.append('id',{{marca.id}})
         formData.append('csrfmiddlewaretoken', '{{ csrf_token }}')
         $.ajax({
             type: 'POST',
-            url: '{% url "home:proveedor_actualizar" %}',
+            url: '{% url "home:marca_actualizar" %}',
             data: formData,
             cache: false,
             processData: false,
@@ -166,7 +145,7 @@
                         json.msg,
                         'success'
                     ).then(() => {
-                      window.location.href = '/listado_proveedores';  
+                      window.location.href = '/listado_marca';  
                       });
                 } else {
                     Swal.fire(
@@ -184,7 +163,13 @@
     });
   </script> 
   
+  {% comment %} <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> {% endcomment %}
 
+  <script>
+    function img_pathUrl(input){
+      $('#img_url')[0].src = (window.URL ? URL : webkitURL).createObjectURL(input.files[0]);
+    }
+  </script>
 
 {% endblock javascripts %}
 

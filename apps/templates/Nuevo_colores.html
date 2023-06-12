@@ -1,5 +1,5 @@
 {% extends 'layouts/base.html' %}
-{% block title %} Agregar Categorias {% endblock %} 
+{% block title %} Agregar Colores {% endblock %} 
 
 {% block content %}
 
@@ -10,12 +10,12 @@
       <nav aria-label="breadcrumb" role="navigation">
         <ol class="breadcrumb adminx-page-breadcrumb">
           <li class="breadcrumb-item"><a href="{% url 'home:index_home' %}">Dashboard</a></li>
-          <li class="breadcrumb-item"><a href="{% url 'home:listado_categorias' %}">Categorias</a></li>
+          <li class="breadcrumb-item"><a href="{% url 'home:listado_colores' %}">Colores</a></li>
         </ol>
       </nav>
 
       <div class="pb-3">          
-        <h1>Agregar Categorias</h1>
+        <h1>Agregar Colores</h1>
       </div>
 
       <div class="row">
@@ -24,7 +24,7 @@
             <div
               class="card-header d-flex justify-content-between align-items-center"
             >
-              <div class="card-header-title">Ingrese la Nueva Categoria</div>
+              <div class="card-header-title">Ingrese El Nuevo Color</div>
 
               <nav class="card-header-actions">
                 <a
@@ -59,43 +59,15 @@
               </nav>
             </div>
             <div class="card-body collapse show" id="card1">       
-               <form class="forms-sample" id="formcategoria" method="POST">{% csrf_token %} 
+               <form class="forms-sample" id="formcolores" method="POST">{% csrf_token %} 
                 <div class="form-group">
-                  <label class="form-label" for="txtnomcat"
-                    >Nombre Categoria</label
+                  <label class="form-label" for="txtnomcol"
+                    >Nombre Color</label
                   >
-                  <input class="form-control mb-2" type="text"  id="txtnomcat"  required>
+                  <input class="form-control mb-2" type="text"  id="txtnomcol"  required>
                 </div>
 
-                <div class="form-group">
-                  <label class="form-label" for="txtdescripcion">Descripcion</label>
-                  <textarea class="form-control" id="txtdescripcion" rows="3"></textarea>
-                </div>
-
-                <div class="form-group">
-                  <label class="form-label" for="cmbcolor">Color</label>
-                  <select class="form-control" id="cmbcolor">
-                    <option  value="" selected="selected">---SELECCIONE---</option>
-                      {% for item in Colores %}
-                          <option value="{{item.id}}">{{item.nom_color}}</option>
-                      {% endfor %}
-                  </select>
-                </div>
-
-                <div class="card mb-grid">
-                  <div class="card-header">
-                    <b>Cargar la Imagen</b>
-                  </div>
-                  <div class="card-body">
-                    <div class="custom-file">
-                      <input type="file" class="custom-file-input" id="imgcat" name="imgcat" onChange="img_pathUrl(this)">
-                      <label class="custom-file-label" for="customFile">Seleccione la Imagen</label>
-                      
-                    </div>
-                  </div>
-                  <img src="" width=50%  id="img_url"/>
-                </div>
-
+               
                 <div class="form-group">
                   <div class="custom-control custom-checkbox">
                     <input
@@ -121,18 +93,14 @@
 
 <script>
   var formData = new FormData();
-  $("#formcategoria").submit(function (e) {
+  $("#formcolores").submit(function (e) {
       e.preventDefault();
-      var img_categoria = $('#imgcat').prop("files")[0];
-      formData.append('txtnomcat', $('#txtnomcat').val())
-      formData.append('txtdescripcion',$('#txtdescripcion').val())
-      formData.append('cmbcolor',$('#cmbcolor').val())
-      formData.append('action','registrar_categoria')
-      formData.append('imgcat',img_categoria)
+      formData.append('txtnomcol', $('#txtnomcol').val())
+      formData.append('action','registrar_colores')
       formData.append('csrfmiddlewaretoken', '{{ csrf_token }}')
       $.ajax({
           type: 'POST',
-          url: '{% url "home:registrar_categoria" %}',
+          url: '{% url "home:registrar_color" %}',
           data: formData,
           cache: false,
           processData: false,
@@ -145,7 +113,7 @@
                       json.msg,
                       'success'
                       ).then(() => {
-                        window.location.href = '/listado_categorias';  
+                        window.location.href = '/listado_colores';  
                         });
               } else {
                   Swal.fire(
@@ -163,11 +131,7 @@
   });
 </script> 
 
-<script>
-  function img_pathUrl(input){
-    $('#img_url')[0].src = (window.URL ? URL : webkitURL).createObjectURL(input.files[0]);
-  }
-</script>
+
 
 {% endblock javascripts %}
 

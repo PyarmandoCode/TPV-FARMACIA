@@ -33,7 +33,7 @@
         </span>
         <span class="sidebar-nav-name"> Maestros </span>
         <span class="sidebar-nav-end">
-            <span class="badge badge-info">3</span>
+            <span class="badge badge-info">7</span>
           </span>
         <span class="sidebar-nav-end">
           <i data-feather="chevron-right" class="nav-collapse-icon"></i>
@@ -61,6 +61,35 @@
               <span class="sidebar-nav-name"> Proveedores </span>
             </a>
           </li>
+
+          <li class="sidebar-nav-item">
+            <a href="{% url 'home:listado_tipoprov' %}" class="sidebar-nav-link">
+              <span class="sidebar-nav-abbr"> TP </span>
+              <span class="sidebar-nav-name"> TipoProveedor </span>
+            </a>
+          </li>
+
+          <li class="sidebar-nav-item">
+            <a href="{% url 'home:listado_colores' %}" class="sidebar-nav-link">
+              <span class="sidebar-nav-abbr"> CO </span>
+              <span class="sidebar-nav-name"> Colores </span>
+            </a>
+          </li>
+
+          <li class="sidebar-nav-item">
+            <a href="{% url 'home:listado_presentacion' %}" class="sidebar-nav-link">
+              <span class="sidebar-nav-abbr"> PE </span>
+              <span class="sidebar-nav-name"> Presentacion </span>
+            </a>
+          </li>
+
+          <li class="sidebar-nav-item">
+            <a href="{% url 'home:listado_marca' %}" class="sidebar-nav-link">
+              <span class="sidebar-nav-abbr"> MC </span>
+              <span class="sidebar-nav-name"> Marca </span>
+            </a>
+          </li>
+
       </ul>
     </li>
 

@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Categorias,Color,Proveedores,Tipo_Proveedor
+from .models import Categorias,Color,Proveedores,Tipo_Proveedor,Presentacion,Marca
 from django.http import JsonResponse
 from django.views.generic import  View
 
@@ -7,6 +7,7 @@ def index(request):
     template_name = "Index.html"
     return render(request, template_name)
 
+#region Categorias
 def Categorias_listado(request):
     categorias = Categorias.objects.filter(est_cat=True)
     context = {
@@ -97,7 +98,9 @@ def UpdateCrudCategorias(request):
         return JsonResponse(response_data)   
     return render(request,template_name) 
 
-            
+#endregion Description
+
+#region Proveedores            
 def Proveedores_listado(request):
     proveedores = Proveedores.objects.filter(est_prov=True)
     context = {
@@ -150,8 +153,6 @@ class DeleteCrudProveedores(View):
             'deleted': True
         }
         return JsonResponse(data)
-    
-
 
 def Proveedor_visualizar(request,id):
     template_name = "Visualizar_proveedor.html"
@@ -199,3 +200,288 @@ def UpdateCrudProveedor(request):
         return JsonResponse(response_data)   
     return render(request,template_name) 
 
+#endregion Proveedores
+
+#region TProveedores 
+
+def TipoProvee_listado(request):
+    Tprov = Tipo_Proveedor.objects.filter(est_tip_prov=True)
+    context = {
+        "tipoprov": Tprov,
+    }
+    template_name = "Listado_tipo_proveedor.html"
+    return render(request, template_name, context)
+
+def TipoProvee_form(request):
+    template_name = "Nuevo_tipo_proveedor.html"
+    return render(request, template_name)
+
+def CreateCrudTipoProveedor(request):
+    response_data = {}
+    template_name="Nuevo_tipo_proveedor.html"
+    if request.POST.get('action') =='registrar_tproveedor':
+        try:
+            nombre_tproveedor = request.POST.get('txtnomtprov')
+            descripcion_tproveedor = request.POST.get('txtdescripcion')
+            
+            Tipo_Proveedor.objects.create(tip_prov=nombre_tproveedor,des_tip_prov=descripcion_tproveedor)
+            
+        except Exception as error:
+            response_data['flag'] = False
+            response_data['msg'] = f'No se Registro El Tipo de Proveedor Correctamente {error}'
+        else:
+            response_data['flag'] = True
+            response_data['msg'] = 'Se Registro con exito El Tipo  Proveedor'   
+        return JsonResponse(response_data)   
+    return render(request,template_name) 
+
+class DeleteCrudTipoProveedor(View):
+    def  get(self, request):
+        id1 = request.GET.get('id', None)
+        Tipo_Proveedor.objects.get(id=id1).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
+    
+def TipoProveedor_visualizar(request,id):
+    template_name = "Visualizar_tipo_proveedor.html"
+    tproveedor=Tipo_Proveedor.objects.get(id=id)
+    
+    context = {"tipoprov":tproveedor,
+               }
+    return render(request, template_name,context)     
+    
+def UpdateCrudTipoProveedor(request):
+    response_data = {}
+    template_name="Visualizar_tipo_proveedor.html"
+    if request.POST.get('action') =='actualizar_tproveedor':
+        try:
+            id=request.POST.get('id')
+            tproveedor = Tipo_Proveedor.objects.get(id=id)
+            tproveedor.tip_prov=request.POST.get('txtnomtprov')
+            tproveedor.des_tip_prov=request.POST.get('txtdescripcion')
+            tproveedor.save()
+        except Exception as error:
+            response_data['flag'] = False
+            response_data['msg'] = f'No Se Modifico el Tipo de Proveedor Correctamente {error}'
+        else:
+            response_data['flag'] = True
+            response_data['msg'] = 'Se Modifico con exito el Tipo de Proveedor'  
+            
+             
+        return JsonResponse(response_data)   
+    return render(request,template_name) 
+
+#endregion TProveedores
+
+#region Colores
+def Colores_listado(request):
+    color = Color.objects.filter(est_color=True)
+    context = {
+        "colores": color,
+    }
+    template_name = "Listado_colores.html"
+    return render(request, template_name, context)
+
+def Colores_form(request):
+    template_name = "Nuevo_colores.html"
+    return render(request, template_name)
+
+def CreateCrudColor(request):
+    response_data = {}
+    template_name="Nuevo_colores.html"
+    if request.POST.get('action') =='registrar_colores':
+        try:
+            nombre_color = request.POST.get('txtnomcol')
+            Color.objects.create(nom_color=nombre_color)
+            
+        except Exception as error:
+            response_data['flag'] = False
+            response_data['msg'] = f'No se Registro El Color Correctamente {error}'
+        else:
+            response_data['flag'] = True
+            response_data['msg'] = 'Se Registro con exito El Color'   
+        return JsonResponse(response_data)   
+    return render(request,template_name) 
+
+class DeleteCrudColor(View):
+    def  get(self, request):
+        id1 = request.GET.get('id', None)
+        Color.objects.get(id=id1).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
+    
+def TipoColor_visualizar(request,id):
+    template_name = "Visualizar_color.html"
+    color=Color.objects.get(id=id)
+    context = {"color":color,
+               }
+    return render(request, template_name,context)     
+
+def UpdateCrudColor(request):
+    response_data = {}
+    template_name="Visualizar_color.html"
+    if request.POST.get('action') =='actualizar_color':
+        try:
+            id=request.POST.get('id')
+            color = Color.objects.get(id=id)
+            color.nom_color=request.POST.get('txtnomcol')
+            color.save()
+        except Exception as error:
+            response_data['flag'] = False
+            response_data['msg'] = f'No Se Modifico el Color Correctamente {error}'
+        else:
+            response_data['flag'] = True
+            response_data['msg'] = 'Se Modifico con exito el Color'  
+            
+        return JsonResponse(response_data)   
+    return render(request,template_name) 
+
+#endregion colores
+
+#region presentacion
+def Presentacion_listado(request):
+    presentacion = Presentacion.objects.filter(est_pre=True)
+    context = {
+        "presentacion": presentacion,
+    }
+    template_name = "Listado_presentacion.html"
+    return render(request, template_name, context)
+
+
+def Presentacion_form(request):
+    template_name = "Nuevo_presentacion.html"
+    return render(request, template_name)
+
+
+def CreateCrudPresentacion(request):
+    response_data = {}
+    template_name="Nuevo_presentacion.html"
+    if request.POST.get('action') =='registrar_presentacion':
+        try:
+            nombre_presentacion = request.POST.get('txtnompre')
+            descripcion_presentacion = request.POST.get('txtdescripcion')
+            
+            Presentacion.objects.create(nom_pre=nombre_presentacion,des_pre=descripcion_presentacion)
+            
+        except Exception as error:
+            response_data['flag'] = False
+            response_data['msg'] = f'No se Registro la Presentacion Correctamente {error}'
+        else:
+            response_data['flag'] = True
+            response_data['msg'] = 'Se Registro con exito la presentacion'   
+        return JsonResponse(response_data)   
+    return render(request,template_name) 
+
+
+class DeleteCrudPresentacion(View):
+    def  get(self, request):
+        id1 = request.GET.get('id', None)
+        Presentacion.objects.get(id=id1).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
+    
+def Presentacion_visualizar(request,id):
+    template_name = "Visualizar_presentacion.html"
+    presentacion=Presentacion.objects.get(id=id)
+    context = {"presentacion":presentacion,
+               }
+    return render(request, template_name,context)     
+
+def UpdateCrudPresentacion(request):
+    response_data = {}
+    template_name="Visualizar_presentacion.html"
+    if request.POST.get('action') =='actualizar_presentacion':
+        try:
+            id=request.POST.get('id')
+            presentacion = Presentacion.objects.get(id=id)
+            presentacion.nom_pre=request.POST.get('txtnompre')
+            presentacion.des_pre=request.POST.get('txtdescripcion')
+            presentacion.save()
+        except Exception as error:
+            response_data['flag'] = False
+            response_data['msg'] = f'No Se Modifico la Presentacion Correctamente {error}'
+        else:
+            response_data['flag'] = True
+            response_data['msg'] = 'Se Modifico con exito la presentacion'  
+        return JsonResponse(response_data)   
+    return render(request,template_name) 
+
+#endregion presentacion
+
+def Marca_listado(request):
+    marca = Marca.objects.filter(est_marca=True)
+    context = {
+        "marca": marca,
+    }
+    template_name = "Listado_marca.html"
+    return render(request, template_name, context)
+
+def Marca_form(request):
+    template_name = "Nuevo_marca.html"
+    return render(request, template_name)
+
+def CreateCrudMarca(request):
+    response_data = {}
+    template_name="Nueva_marca.html"
+    if request.POST.get('action') =='registrar_marca':
+        try:
+            nombre_marca = request.POST.get('txtnom_marca')
+            descripcion_marca = request.POST.get('txtdescripcion')
+            file = request.FILES.get('imgmarca')
+            Marca.objects.create(nom_marca=nombre_marca,des_marca=descripcion_marca,img_marca=file)
+            
+        except Exception as error:
+            response_data['flag'] = False
+            response_data['msg'] = f'No se Registro la Marca Correctamente {error}'
+        else:
+            response_data['flag'] = True
+            response_data['msg'] = 'Se Registro con exito la Marca'   
+        return JsonResponse(response_data)   
+    return render(request,template_name) 
+
+class DeleteCrudMarca(View):
+    def  get(self, request):
+        id1 = request.GET.get('id', None)
+        Marca.objects.get(id=id1).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
+    
+def Marca_visualizar(request,id):
+    template_name = "Visualizar_marca.html"
+    marca=Marca.objects.get(id=id)
+    context = {"marca":marca,
+               }
+    return render(request, template_name,context)     
+
+
+def UpdateCrudMarca(request):
+    response_data = {}
+    template_name="Visualizar_marca.html"
+    if request.POST.get('action') =='actualizar_marca':
+        try:
+            id=request.POST.get('id')
+            marca = Marca.objects.get(id=id)
+            marca.nom_marca=request.POST.get('txtnom_mar')
+            marca.des_marca=request.POST.get('txtdescripcion')
+            file = request.FILES.get('imgmarca')
+            if file:
+                marca.img_marca=file
+            marca.save()
+        except Exception as error:
+            response_data['flag'] = False
+            response_data['msg'] = f'No Se Modifico la Marca Correctamente {error}'
+        else:
+            response_data['flag'] = True
+            response_data['msg'] = 'Se Modifico con exito la Marca'  
+            
+             
+        return JsonResponse(response_data)   
+    return render(request,template_name) 

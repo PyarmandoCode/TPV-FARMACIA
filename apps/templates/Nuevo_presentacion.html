@@ -1,5 +1,5 @@
 {% extends 'layouts/base.html' %}
-{% block title %} Agregar Proveedor {% endblock %} 
+{% block title %} Agregar Presentacion {% endblock %} 
 
 {% block content %}
 
@@ -9,13 +9,13 @@
 
       <nav aria-label="breadcrumb" role="navigation">
         <ol class="breadcrumb adminx-page-breadcrumb">
-          <li class="breadcrumb-item"><a href="">Dashboard</a></li>
-          <li class="breadcrumb-item"><a href="{% url 'home:listado_proveedores' %}">Proveedores</a></li>
+          <li class="breadcrumb-item"><a href="{% url 'home:index_home' %}">Dashboard</a></li>
+          <li class="breadcrumb-item"><a href="{% url 'home:listado_presentacion' %}">Presentacion</a></li>
         </ol>
       </nav>
 
       <div class="pb-3">          
-        <h1>Agregar Proveedores</h1>
+        <h1>Agregar Presentacion</h1>
       </div>
 
       <div class="row">
@@ -24,7 +24,7 @@
             <div
               class="card-header d-flex justify-content-between align-items-center"
             >
-              <div class="card-header-title">Ingrese el Nuevo Proveedor</div>
+              <div class="card-header-title">Ingrese Presentacion</div>
 
               <nav class="card-header-actions">
                 <a
@@ -32,7 +32,8 @@
                   data-toggle="collapse"
                   href="#card1"
                   aria-expanded="false"
-                  aria-controls="card1">
+                  aria-controls="card1"
+                >
                   <i data-feather="minus-circle"></i>
                 </a>
 
@@ -58,10 +59,12 @@
               </nav>
             </div>
             <div class="card-body collapse show" id="card1">       
-               <form class="forms-sample" id="formproveedor" method="POST">{% csrf_token %} 
+               <form class="forms-sample" id="formpresentacion" method="POST">{% csrf_token %} 
                 <div class="form-group">
-                  <label class="form-label" for="txtnomprov">Nombre</label>
-                  <input class="form-control mb-2" type="text"  id="txtnomprov"  required>
+                  <label class="form-label" for="txtnompre"
+                    >Nombre</label
+                  >
+                  <input class="form-control mb-2" type="text"  id="txtnompre"  required>
                 </div>
 
                 <div class="form-group">
@@ -70,50 +73,13 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label" for="txtdirprov">Direccion</label>
-                    <input class="form-control mb-2" type="text"  id="txtdirprov"  required>
-                  </div>
-
-                  <div class="form-group">
-                    <label class="form-label" for="txtdocprov">Documento</label>
-                    <input class="form-control mb-2" type="text"  id="txtdocprov"  required>
-                  </div>  
-
-                  <div class="form-group">
-                    <label class="form-label" for="txttelprov">Telefono</label>
-                    <input class="form-control mb-2" type="text"  id="txttelprov"  required>
-                  </div>
-                  
-                  <div class="form-group">
-                    <label class="form-label" for="txtemailprov">Email</label>
-                    <input class="form-control mb-2" type="Email"  id="txtemailprov"  required>
-                  </div>
-
-                  <div class="form-group">
-                    <label class="form-label" for="txtcontactoprov">Contacto</label>
-                    <input class="form-control mb-2" type="text"  id="txtcontactoprov"  required>
-                  </div>
-
-
-                <div class="form-group">
-                  <label class="form-label" for="cmbtproveedor">Tipo</label>
-                  <select class="form-control" id="cmbtproveedor">
-                    <option  value="" selected="selected">---SELECCIONE---</option>
-                      {% for item in Tipo %}
-                          <option value="{{item.id}}">{{item.tip_prov}}</option>
-                      {% endfor %}
-                  </select>
-                </div> 
-
-            
-                <div class="form-group">
                   <div class="custom-control custom-checkbox">
                     <input
                       type="checkbox"
                       class="custom-control-input"
-                      id="chkestadoprov"
+                      id="chkestadopren"
                     />
-                    <label class="custom-control-label" for="chkestadoprov"
+                    <label class="custom-control-label" for="chkestadopren"
                       >Activo</label
                     >
                   </div>
@@ -131,22 +97,15 @@
 
 <script>
   var formData = new FormData();
-  $("#formproveedor").submit(function (e) {
+  $("#formpresentacion").submit(function (e) {
       e.preventDefault();
-      
-      formData.append('txtnomprov', $('#txtnomprov').val())
+      formData.append('txtnompre', $('#txtnompre').val())
       formData.append('txtdescripcion',$('#txtdescripcion').val())
-      formData.append('txtdirprov',$('#txtdirprov').val())
-      formData.append('txtdocprov',$('#txtdocprov').val())
-      formData.append('txttelprov',$('#txttelprov').val())
-      formData.append('txtemailprov',$('#txtemailprov').val())
-      formData.append('txtcontactoprov',$('#txtcontactoprov').val())
-      formData.append('cmbtproveedor',$('#cmbtproveedor').val())
-      formData.append('action','registrar_proveedor')
+      formData.append('action','registrar_presentacion')
       formData.append('csrfmiddlewaretoken', '{{ csrf_token }}')
       $.ajax({
           type: 'POST',
-          url: '{% url "home:registrar_proveedores" %}',
+          url: '{% url "home:registrar_presentacion" %}',
           data: formData,
           cache: false,
           processData: false,
@@ -159,7 +118,7 @@
                       json.msg,
                       'success'
                       ).then(() => {
-                        window.location.href = '/listado_proveedores';  
+                        window.location.href = '/listado_presentacion';  
                         });
               } else {
                   Swal.fire(
@@ -176,7 +135,6 @@
       });
   });
 </script> 
-
 
 
 {% endblock javascripts %}

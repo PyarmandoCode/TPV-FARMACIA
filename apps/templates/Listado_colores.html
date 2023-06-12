@@ -1,5 +1,5 @@
 {% extends 'layouts/base.html' %}
-{% block title %}Listado de Proveedores{% endblock %}
+{% block title %}Listado de Colores{% endblock %}
 
 
 {% block content %}
@@ -13,13 +13,13 @@
         <!-- BreadCrumb -->
         <nav aria-label="breadcrumb" role="navigation">
           <ol class="breadcrumb adminx-page-breadcrumb">
-            <li class="breadcrumb-item"><a href="">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'home:index_home' %}">Dashboard</a></li>
             <li class="breadcrumb-item"><a href="#">Productos</a></li>
           </ol>
         </nav>
         
         <div class="text-right">
-         <a href="{% url 'home:agregar_proveedores' %}" class="btn btn-lg btn-labeled-right btn-info mr-2">
+         <a href="{% url 'home:agregar_colores' %}" class="btn btn-lg btn-labeled-right btn-info mr-2">
             <span class="btn-label">
               <span class="oi oi-arrow-thick-right" aria-hidden="true"></span>
             </span>
@@ -30,38 +30,32 @@
         </div>
         
         <div class="pb-3">          
-          <h1>Proveedores</h1>
+          <h1>Colores</h1>
         </div>
         <div class="row">
           <div class="col">
             <div class="card mb-grid">
               <div class="table-responsive-md">
-                <table class="table table-actions table-striped table-hover mb-0" id=datatable-proveedores data-table>
+                <table class="table table-actions table-striped table-hover mb-0" id=datatable-colores data-table>
                   <thead>
                     <tr>
                       <th scope="col">Codigo</th>
                       <th scope="col">Nombre</th>
-                      <th scope="col">Direccion</th>
-                      <th scope="col">Telefono</th>
-                      <th scope="col">Tipo</th>
                       <th class="center">Opciones</th>
                     </tr>
                   </thead>
                   <tbody>
-                    
-                  {% for item in Proveedores %}  
+                  {% for item in colores %}  
                     <tr id="item-{{item.id}}">
                       <td> {{ item.id }} </td>
-                      <td>{{item.nom_prov}}</td>
-                      <td>{{item.dir_prov}}</td>
-                      <td>{{item.tel_prov}}</td>
-                      <td>{{item.tipo_prov}}</td>
+                      <td>{{item.nom_color}}</td>
+                      
                       <td>
-                        <a href="{% url 'home:proveedor_visualizar' item.id %}" class="btn btn-icon btn-info mr-2">
+                        <a href="{% url 'home:color_visualizar' item.id %}" class="btn btn-icon btn-info mr-2">
                           <i data-feather="eye"></i>
                         </a>
 
-                        <button class="btn btn-icon btn-danger" onClick="deleteProveedor({{item.id}})">
+                        <button class="btn btn-icon btn-danger" onClick="deleteColor({{item.id}})">
                           <i data-feather="trash-2"></i>
                         </button>
                         
@@ -112,18 +106,16 @@
               "columns": [
                 null,
                 null,
-                null,
-                null,
-                null,
+               
                 { "orderable": false },
               ]
           });
     });
 
-function deleteProveedor(id) {
+function deleteColor(id) {
       Swal
         .fire({
-            title: "Desea Eliminar El Proveedor?",
+            title: "Desea Eliminar El Color?",
             text: "Con codigo "+id,
             icon: 'error',
             showCancelButton: true,
@@ -133,25 +125,23 @@ function deleteProveedor(id) {
         .then(resultado => {
             if (resultado.value) {
               $.ajax({
-                url: "{% url 'home:proveedor_eliminar'  %}",
+                url: "{% url 'home:color_eliminar'  %}",
                 data: {
                     'id': id,
                 },
                 dataType: 'json',
                 success: function (data) {
                     if (data.deleted) {
-                      $("#datatable-proveedores #item-" + id).remove();
+                      $("#datatable-colores #item-" + id).remove();
                      }
                     }
                   });
             
             } else {
-                console.log("*NO se elimina el Proveedor*");
+                console.log("*NO se elimina el color*");
             }   
             })
-        }    
-
-    
+        }
 </script> 
 
 {% endblock javascripts %}

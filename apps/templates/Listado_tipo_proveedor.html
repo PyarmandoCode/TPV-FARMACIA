@@ -1,5 +1,5 @@
 {% extends 'layouts/base.html' %}
-{% block title %}Listado de Categorias{% endblock %}
+{% block title %}Listado de Tipo de Proveedores{% endblock %}
 
 
 {% block content %}
@@ -19,7 +19,7 @@
         </nav>
         
         <div class="text-right">
-         <a href="{% url 'home:agregar_categoria' %}" class="btn btn-lg btn-labeled-right btn-info mr-2">
+         <a href="{% url 'home:agregar_tipoprov' %}" class="btn btn-lg btn-labeled-right btn-info mr-2">
             <span class="btn-label">
               <span class="oi oi-arrow-thick-right" aria-hidden="true"></span>
             </span>
@@ -30,35 +30,35 @@
         </div>
         
         <div class="pb-3">          
-          <h1>Categorias</h1>
+          <h1>Tipo de Proveedores</h1>
         </div>
         <div class="row">
           <div class="col">
             <div class="card mb-grid">
               <div class="table-responsive-md">
-                <table class="table table-actions table-striped table-hover mb-0" id=datatable-categorias data-table>
+                <table class="table table-actions table-striped table-hover mb-0" id=datatable-tproveedor data-table>
                   <thead>
                     <tr>
                       <th scope="col">Codigo</th>
                       <th scope="col">Nombre</th>
                       <th scope="col">Descripcion</th>
-                      <th scope="col">Color</th>
                       <th class="center">Opciones</th>
                     </tr>
                   </thead>
                   <tbody>
-                  {% for item in Categorias %}  
+                    
+                  {% for item in tipoprov %}  
                     <tr id="item-{{item.id}}">
                       <td> {{ item.id }} </td>
-                      <td>{{item.nom_cat}}</td>
-                      <td>{{item.des_cat}}</td>
-                      <td>{{item.color_cat}}</td>
+                      <td>{{item.tip_prov}}</td>
+                      <td>{{item.des_tip_prov}}</td>
+                    
                       <td>
-                        <a href="{% url 'home:categoria_visualizar' item.id %}" class="btn btn-icon btn-info mr-2">
+                        <a href="{% url 'home:tipoprov_visualizar' item.id %}" class="btn btn-icon btn-info mr-2">
                           <i data-feather="eye"></i>
                         </a>
 
-                        <button class="btn btn-icon btn-danger" onClick="deleteCategoria({{item.id}})">
+                        <button class="btn btn-icon btn-danger" onClick="deletetproveedor({{item.id}})">
                           <i data-feather="trash-2"></i>
                         </button>
                         
@@ -110,16 +110,16 @@
                 null,
                 null,
                 null,
-                null,
+                
                 { "orderable": false },
               ]
           });
     });
 
-function deleteCategoria(id) {
+function deletetproveedor(id) {
       Swal
         .fire({
-            title: "Desea Eliminar la Categoria?",
+            title: "Desea Eliminar El Tipo de Proveedor?",
             text: "Con codigo "+id,
             icon: 'error',
             showCancelButton: true,
@@ -129,20 +129,20 @@ function deleteCategoria(id) {
         .then(resultado => {
             if (resultado.value) {
               $.ajax({
-                url: "{% url 'home:categoria_eliminar'  %}",
+                url: "{% url 'home:tipoprov_eliminar'  %}",
                 data: {
                     'id': id,
                 },
                 dataType: 'json',
                 success: function (data) {
                     if (data.deleted) {
-                      $("#datatable-categorias #item-" + id).remove();
+                      $("#datatable-tproveedor #item-" + id).remove();
                      }
                     }
                   });
             
             } else {
-                console.log("*NO se elimina la categoria*");
+                console.log("*NO se elimina el tipo de Proveedor*");
             }   
             })
         }

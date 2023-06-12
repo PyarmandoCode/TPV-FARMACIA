@@ -1,0 +1,145 @@
+{% extends 'layouts/base.html' %}
+{% block title %} Editar Presentacion {% endblock %} 
+
+{% block content %}
+
+<div class="adminx-content">
+  <div class="adminx-main-content">
+    <div class="container-fluid">
+
+      <nav aria-label="breadcrumb" role="navigation">
+        <ol class="breadcrumb adminx-page-breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'home:index_home' %}">Dashboard</a></li>
+          <li class="breadcrumb-item"><a href="{% url 'home:listado_presentacion' %}">Presentacion</a></li>
+        </ol>
+      </nav>
+
+      <div class="pb-3">          
+        <h1>Editar Presentacion</h1>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="card mb-grid">
+            <div
+              class="card-header d-flex justify-content-between align-items-center"
+            >
+              <div class="card-header-title">Datos de Presentacion</div>
+
+              <nav class="card-header-actions">
+                <a
+                  class="card-header-action"
+                  data-toggle="collapse"
+                  href="#card1"
+                  aria-expanded="false"
+                  aria-controls="card1"
+                >
+                  <i data-feather="minus-circle"></i>
+                </a>
+
+                <div class="dropdown">
+                  <a
+                    class="card-header-action"
+                    href="#"
+                    role="button"
+                    id="card1Settings"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                  >
+                    <i data-feather="settings"></i>
+                  </a>
+
+                  
+                </div>
+
+                <a href="#" class="card-header-action">
+                  <i data-feather="x-circle"></i>
+                </a>
+              </nav>
+            </div>
+            <div class="card-body collapse show" id="card1">  
+                <form class="forms-sample" id="formeditpresentacion" method="POST">{% csrf_token %}      
+                <div class="form-group">
+                  <label class="form-label" for="txtnompre"
+                    >Nombre</label
+                  >
+                  <input class="form-control mb-2" type="text"  id="txtnompre" name="txtnompre" value="{{presentacion.nom_pre}}" required>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="txtdescripcion" >Descripcion</label>
+                  <textarea class="form-control" id="txtdescripcion" name="txtdescripcion" rows="3">{{presentacion.des_pre}}</textarea>
+                </div>
+
+
+                <div class="form-group">
+                  <div class="custom-control custom-checkbox">
+                    <input
+                      type="checkbox"
+                      class="custom-control-input"
+                      id="chkestadopre"
+                    />
+                    <label class="custom-control-label" for="chkestadopre"
+                      >Activo</label
+                    >
+                  </div>
+                </div>
+
+                <button type="submit"  class="btn btn-icon btn-info">Grabar</button>
+
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+</div>
+
+{% block javascripts %}
+
+<script>
+    var formData = new FormData();
+    $("#formeditpresentacion").submit(function (e) {
+        e.preventDefault();
+        formData.append('txtnompre', $('#txtnompre').val())
+        formData.append('txtdescripcion',$('#txtdescripcion').val())
+        formData.append('action','actualizar_presentacion')
+        formData.append('id',{{presentacion.id}})
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}')
+        $.ajax({
+            type: 'POST',
+            url: '{% url "home:presentacion_actualizar" %}',
+            data: formData,
+            cache: false,
+            processData: false,
+            contentType: false,
+            enctype: 'multipart/form-data',
+            success: function (json) {
+                if (json.flag) {
+                    Swal.fire(
+                        'Felicitaciones',
+                        json.msg,
+                        'success'
+                    ).then(() => {
+                      window.location.href = '/listado_presentacion';  
+                      });
+                } else {
+                    Swal.fire(
+                        'ERROR',
+                        json.msg,
+                        'error'
+                        
+                    )
+                }
+            },
+            error: function (response) {
+                console.log(response)
+            }
+        });
+    });
+  </script> 
+  
+
+{% endblock javascripts %}
+
+{% endblock %}

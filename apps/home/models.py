@@ -5,8 +5,6 @@ class Categorias(models.Model):
     nom_cat = models.CharField(max_length=120)
     des_cat=models.TextField(blank=True,null=True)
     color_cat = models.ForeignKey("Color",on_delete=models.CASCADE)
-    #img_cat = models.CharField(max_length=90,blank=True,null=True)
-    #img_cat = models.ImageField(null=True, blank=True)
     img_cat = models.ImageField(upload_to='categorias/', null=True, blank=True)
     est_cat = models.BooleanField(default=True)
 
@@ -59,9 +57,9 @@ class Proveedores(models.Model):
 class Marca(models.Model):
     nom_marca = models.CharField(max_length=120)
     des_marca=models.TextField(blank=True,null=True)
-    img_marca = models.CharField(max_length=90,blank=True,null=True)
-    
+    img_marca = models.ImageField(upload_to='marca/', null=True, blank=True)
     est_marca = models.BooleanField(default=True)
+    
 
     def __str__(self):
         return self.nom_marca    
@@ -110,7 +108,7 @@ class Productos(models.Model):
      ubicacion =models.CharField(max_length=120)
      color_prod =  models.ForeignKey("Color",on_delete=models.CASCADE)
      img_prod = models.CharField(max_length=90,blank=True,null=True)
-     cat_prod=models.ForeignKey(Categorias,on_delete=models.CASCADE)
+     cat_prod=models.ForeignKey(Categorias,on_delete=models.CASCADE,null=True)
      prov_prod=models.ForeignKey(Proveedores,on_delete=models.CASCADE)
      marca_prod=models.ForeignKey(Marca,on_delete=models.CASCADE)
      present_prod=models.ForeignKey(Presentacion,on_delete=models.CASCADE)
