@@ -1,4 +1,4 @@
-from .views import index,Categorias_listado,Categoria_form,CreateCrudCategorias,Categoria_visualizar,DeleteCrudCategorias,UpdateCrudCategorias,Proveedores_listado,Proveedor_form,CreateCrudProveedores,DeleteCrudProveedores,Proveedor_visualizar,UpdateCrudProveedor,TipoProvee_listado,TipoProvee_form,CreateCrudTipoProveedor,DeleteCrudTipoProveedor,UpdateCrudTipoProveedor,TipoProveedor_visualizar,Colores_listado,Colores_form,CreateCrudColor,DeleteCrudColor,TipoColor_visualizar,UpdateCrudColor,Presentacion_listado,Presentacion_form,CreateCrudPresentacion,DeleteCrudPresentacion,Presentacion_visualizar,UpdateCrudPresentacion,Marca_listado,Marca_form,CreateCrudMarca,DeleteCrudMarca,Marca_visualizar,UpdateCrudMarca
+from .views import index,Categorias_listado,Categoria_form,CreateCrudCategorias,Categoria_visualizar,DeleteCrudCategorias,UpdateCrudCategorias,Proveedores_listado,Proveedor_form,CreateCrudProveedores,DeleteCrudProveedores,Proveedor_visualizar,UpdateCrudProveedor,TipoProvee_listado,TipoProvee_form,CreateCrudTipoProveedor,DeleteCrudTipoProveedor,UpdateCrudTipoProveedor,TipoProveedor_visualizar,Colores_listado,Colores_form,CreateCrudColor,DeleteCrudColor,TipoColor_visualizar,UpdateCrudColor,Presentacion_listado,Presentacion_form,CreateCrudPresentacion,DeleteCrudPresentacion,Presentacion_visualizar,UpdateCrudPresentacion,Marca_listado,Marca_form,CreateCrudMarca,DeleteCrudMarca,Marca_visualizar,UpdateCrudMarca,Productos_listado,Productos_form,CreateCrudProductos,DeleteCrudProductos,Productos_visualizar,UpdateCrudProductos
 from django.urls import path
 
 app_name = 'home'
@@ -41,4 +41,10 @@ urlpatterns = [
     path('marca_eliminar/', DeleteCrudMarca.as_view(),name="marca_eliminar"),
     path('marca_visualizar/<int:id>', Marca_visualizar,name="marca_visualizar"),
     path('marca_actualizar/', UpdateCrudMarca,name="marca_actualizar"),
+    path('listado_productos/', Productos_listado,name="listado_productos"),
+    path('agregar_productos/', Productos_form,name="agregar_productos"),
+    path('registrar_productos/', CreateCrudProductos,name="registrar_productos"),
+    path('productos_eliminar/', DeleteCrudProductos.as_view(),name="productos_eliminar"),
+    path('productos_visualizar/<int:id>', Productos_visualizar,name="productos_visualizar"),
+    path('productos_actualizar/', UpdateCrudProductos,name="productos_actualizar"),
 ]

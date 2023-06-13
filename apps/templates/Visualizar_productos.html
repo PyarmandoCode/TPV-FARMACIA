@@ -1,0 +1,252 @@
+{% extends 'layouts/base.html' %}
+{% block title %} Editar Productos {% endblock %} 
+
+{% block content %}
+
+<div class="adminx-content">
+  <div class="adminx-main-content">
+    <div class="container-fluid">
+
+      <nav aria-label="breadcrumb" role="navigation">
+        <ol class="breadcrumb adminx-page-breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'home:index_home' %}">Dashboard</a></li>
+          <li class="breadcrumb-item"><a href="{% url 'home:listado_productos' %}">Productos</a></li>
+        </ol>
+      </nav>
+
+      <div class="pb-3">          
+        <h1>Editar Productos</h1>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="card mb-grid">
+            <div
+              class="card-header d-flex justify-content-between align-items-center"
+            >
+              <div class="card-header-title">Datos del Producto</div>
+
+              <nav class="card-header-actions">
+                <a
+                  class="card-header-action"
+                  data-toggle="collapse"
+                  href="#card1"
+                  aria-expanded="false"
+                  aria-controls="card1"
+                >
+                  <i data-feather="minus-circle"></i>
+                </a>
+
+                <div class="dropdown">
+                  <a
+                    class="card-header-action"
+                    href="#"
+                    role="button"
+                    id="card1Settings"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                  >
+                    <i data-feather="settings"></i>
+                  </a>
+
+                  
+                </div>
+
+                <a href="#" class="card-header-action">
+                  <i data-feather="x-circle"></i>
+                </a>
+              </nav>
+            </div>
+            <div class="card-body collapse show" id="card1">       
+               <form class="forms-sample" id="formeditproducto" method="POST">{% csrf_token %} 
+                <div class="form-group">
+                  <label class="form-label" for="txtnomprod">Nombre Producto</label>
+                  <input class="form-control mb-2" type="text"  id="txtnomprod" value="{{productos.nom_prod}}" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="txtcodbarra">Codigo Barra</label>
+                    <input class="form-control mb-2" type="text"  id="txtcodbarra"  value="{{productos.cod_barra_prod}}" required>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label" for="txtetiqueta">Etiqueta</label>
+                    <input class="form-control mb-2" type="text"  id="txtetiqueta"  value="{{productos.nom_etiqueta_prod}}" required>
+                  </div>  
+
+                <div class="form-group">
+                  <label class="form-label" for="txtdescripcion">Descripcion</label>
+                  <textarea class="form-control" id="txtdescripcion" rows="3">{{productos.des_prod}}</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="txtumedida">Unidad Medida</label>
+                    <input class="form-control mb-2" type="text"  id="txtumedida" value="{{productos.umedida_prod}}" required>
+                </div> 
+
+                <div class="form-group">
+                    <label class="form-label" for="txtubicacion">Ubicacion</label>
+                    <input class="form-control mb-2" type="text"  id="txtubicacion" value="{{productos.ubicacion}}" required>
+                </div> 
+
+                <div class="form-group">
+                  <label class="form-label" for="cmbcolor">Color</label>
+                  <select class="form-control" id="cmbcolor">
+                    <option  value="" selected="selected">{{colorseleccionado}}</option>
+                      {% for item in Colores %}
+                          <option value="{{item.id}}">{{item.nom_color}}</option>
+                      {% endfor %}
+                  </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="cmbcategoria">Categoria</label>
+                    <select class="form-control" id="cmbcategoria">
+                      <option  value="" selected="selected">{{categoriaseleccionado}}</option>
+                        {% for item in Categorias %}
+                            <option value="{{item.id}}">{{item.nom_cat}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="cmbproveedores">Proveedor</label>
+                    <select class="form-control" id="cmbproveedores">
+                      <option  value="" selected="selected">{{proveedorseleccionado}}</option>
+                        {% for item in Proveedores %}
+                            <option value="{{item.id}}">{{item.nom_prov}}</option>
+                        {% endfor %}
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label" for="cmbmarca">Marca</label>
+                    <select class="form-control" id="cmbmarca">
+                      <option  value="" selected="selected">{{marcaseleccionado}}</option>
+                        {% for item in Marcas %}
+                            <option value="{{item.id}}">{{item.nom_marca}}</option>
+                        {% endfor %}
+                    </select>
+                  </div>  
+
+                  <div class="form-group">
+                    <label class="form-label" for="cmbpresentacion">Presentacion</label>
+                    <select class="form-control" id="cmbpresentacion">
+                      <option  value="" selected="selected">{{presentacionseleccionado}}</option>
+                        {% for item in Presentacion %}
+                            <option value="{{item.id}}">{{item.nom_pre}}</option>
+                        {% endfor %}
+                    </select>
+                  </div> 
+
+
+                  <div class="card mb-grid">
+                    <div class="card-header">
+                      <b>Cargar la Imagen</b>
+                    </div>
+                    <div class="card-body">
+                      <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="imgprod" name="imgprod" onChange="img_pathUrl(this)">
+                        <label class="custom-file-label" for="imgprod">Seleccione la Imagen</label>
+                      </div>
+                      
+                    </div>
+                    {% if productos.img_prod %} 
+                       <img src={{productos.img_prod.url}} width=50%  id="img_url"/>
+                    {% else %} 
+                      <img src="https://res.cloudinary.com/dream-music/image/upload/v1686173754/team/no_image_mpxtqu.jpg" width=50%  id="img_url"/>   
+                      
+                    {% endif %} 
+                  </div>
+  
+
+
+                <div class="form-group">
+                  <div class="custom-control custom-checkbox">
+                    <input
+                      type="checkbox"
+                      class="custom-control-input"
+                      id="chkestadopre"
+                    />
+                    <label class="custom-control-label" for="chkestadopre"
+                      >Activo</label
+                    >
+                  </div>
+                </div>
+                <button type="submit"   class="btn btn-primary">Grabar</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+</div>
+
+{% block javascripts %}
+
+
+<script>
+  var formData = new FormData();
+  $("#formeditproducto").submit(function (e) {
+      e.preventDefault();
+      var img_producto = $('#imgprod').prop("files")[0];
+      formData.append('txtnomprod', $('#txtnomprod').val())
+      formData.append('txtcodbarra', $('#txtcodbarra').val())
+      formData.append('txtetiqueta', $('#txtetiqueta').val())
+      formData.append('txtdescripcion',$('#txtdescripcion').val())
+      formData.append('txtumedida', $('#txtumedida').val())
+      formData.append('txtubicacion', $('#txtubicacion').val())
+      formData.append('cmbcolor',$('#cmbcolor').val())
+      formData.append('cmbcategoria',$('#cmbcategoria').val())
+      formData.append('cmbproveedores',$('#cmbproveedores').val())
+      formData.append('cmbmarca',$('#cmbmarca').val())
+      formData.append('cmbpresentacion',$('#cmbpresentacion').val())
+      formData.append('action','actualizar_productos')
+      if (img_producto) 
+          {
+            formData.append('imgprod',img_producto)
+          }
+      formData.append('id',{{productos.id}})    
+      formData.append('csrfmiddlewaretoken', '{{ csrf_token }}')
+      $.ajax({
+          type: 'POST',
+          url: '{% url "home:productos_actualizar" %}',
+          data: formData,
+          cache: false,
+          processData: false,
+          contentType: false,
+          enctype: 'multipart/form-data',
+          success: function (json) {
+              if (json.flag) {
+                  Swal.fire(
+                      'Felicitaciones',
+                      json.msg,
+                      'success'
+                      ).then(() => {
+                        window.location.href = '/listado_productos';  
+                        });
+              } else {
+                  Swal.fire(
+                      'ERROR',
+                      json.msg,
+                      'error'
+                      
+                  )
+              }
+          },
+          error: function (response) {
+              console.log(response)
+          }
+      });
+  });
+</script> 
+
+<script>
+  function img_pathUrl(input){
+    $('#img_url')[0].src = (window.URL ? URL : webkitURL).createObjectURL(input.files[0]);
+  }
+</script>
+
+{% endblock javascripts %}
+
+{% endblock %}

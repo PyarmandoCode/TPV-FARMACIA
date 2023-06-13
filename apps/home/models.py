@@ -107,20 +107,21 @@ class Productos(models.Model):
      umedida_prod=models.CharField(max_length=120)
      ubicacion =models.CharField(max_length=120)
      color_prod =  models.ForeignKey("Color",on_delete=models.CASCADE)
-     img_prod = models.CharField(max_length=90,blank=True,null=True)
+     img_prod = models.ImageField(upload_to='productos/', null=True, blank=True)
      cat_prod=models.ForeignKey(Categorias,on_delete=models.CASCADE,null=True)
-     prov_prod=models.ForeignKey(Proveedores,on_delete=models.CASCADE)
+     prov_prod=models.ForeignKey(Proveedores,on_delete=models.CASCADE,null=True)
      marca_prod=models.ForeignKey(Marca,on_delete=models.CASCADE)
      present_prod=models.ForeignKey(Presentacion,on_delete=models.CASCADE)
+     est_prod = models.BooleanField(default=True)
     
      
      #Estos campos deberian ir en compras
-     costo_prod=models.DecimalField(max_digits=6,decimal_places=2)
-     pre_prod_publico=models.DecimalField(max_digits=6,decimal_places=2)
+     #costo_prod=models.DecimalField(max_digits=6,decimal_places=2)
+     #pre_prod_publico=models.DecimalField(max_digits=6,decimal_places=2)
      
      #Estos campos deberian ir en compras
-     acepta_desc_prod=models.BooleanField(default=True)
-     acepta_desc_imp=models.BooleanField(default=True)
+     #acepta_desc_prod=models.BooleanField(default=True)
+     #acepta_desc_imp=models.BooleanField(default=True)
 
      def __str__(self):
         return self.nom_prod  

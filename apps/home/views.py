@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Categorias,Color,Proveedores,Tipo_Proveedor,Presentacion,Marca
+from .models import Categorias,Color,Proveedores,Tipo_Proveedor,Presentacion,Marca,Productos
 from django.http import JsonResponse
 from django.views.generic import  View
 
@@ -414,6 +414,7 @@ def UpdateCrudPresentacion(request):
 
 #endregion presentacion
 
+#region marca
 def Marca_listado(request):
     marca = Marca.objects.filter(est_marca=True)
     context = {
@@ -481,6 +482,179 @@ def UpdateCrudMarca(request):
         else:
             response_data['flag'] = True
             response_data['msg'] = 'Se Modifico con exito la Marca'  
+            
+             
+        return JsonResponse(response_data)   
+    return render(request,template_name) 
+#endregion marca
+
+def Productos_listado(request):
+    productos = Productos.objects.filter(est_prod=True)
+    context = {
+        "productos": productos,
+    }
+    template_name = "Listado_productos.html"
+    return render(request, template_name, context)
+
+def Productos_form(request):
+    template_name = "Nuevo_productos.html"
+    color=Color.objects.filter(est_color=True)
+    categoria=Categorias.objects.filter(est_cat=True)
+    proveedor=Proveedores.objects.filter(est_prov=True)
+    marca=Marca.objects.filter(est_marca=True)
+    presentacion=Presentacion.objects.filter(est_pre=True)
+
+    context = {
+        "Colores":color,"Categorias":categoria,"Proveedores":proveedor,"Marcas":marca,"Presentacion":presentacion
+    }
+    return render(request, template_name,context)
+
+def CreateCrudProductos(request):
+    response_data = {}
+    template_name="Nuevo_productos.html"
+    if request.POST.get('action') =='registrar_productos':
+        try:
+            nombre_producto = request.POST.get('txtnomprod')
+            barra_producto = request.POST.get('txtcodbarra')
+            etiqueta_producto = request.POST.get('txtetiqueta')
+            des_producto = request.POST.get('txtdescripcion')
+            umedida_producto = request.POST.get('txtumedida')
+            ubicacion_producto = request.POST.get('txtubicacion')
+            color_producto = request.POST.get('cmbcolor')
+            color=Color.objects.get(id=color_producto)
+            categoria_producto = request.POST.get('cmbcategoria')
+            categoria=Categorias.objects.get(id=categoria_producto)
+            proveedor_producto = request.POST.get('cmbproveedor')
+            proveedor=Proveedores.objects.get(id=proveedor_producto)
+            marca_producto = request.POST.get('cmbmarca')
+            marca=Marca.objects.get(id=marca_producto)
+            presentacion_producto = request.POST.get('cmbpresentacion')
+            presentacion=Presentacion.objects.get(id=presentacion_producto)
+            file = request.FILES.get('imgprod')
+            Productos.objects.create(nom_prod=nombre_producto,
+                                      cod_barra_prod=barra_producto,
+                                      nom_etiqueta_prod=etiqueta_producto,
+                                      des_prod=des_producto,
+                                      umedida_prod=umedida_producto,
+                                      ubicacion=ubicacion_producto,
+                                      color_prod=color,
+                                      img_prod=file,
+                                      cat_prod=categoria,
+                                      prov_prod=proveedor,
+                                      marca_prod= marca,
+                                      present_prod=presentacion
+                                      )
+            
+        except Exception as error:
+            response_data['flag'] = False
+            response_data['msg'] = f'No se Registro el Producto Correctamente {error}'
+        else:
+            response_data['flag'] = True
+            response_data['msg'] = 'Se Registro con exito el Producto'   
+        return JsonResponse(response_data)   
+    return render(request,template_name) 
+
+
+class DeleteCrudProductos(View):
+    def  get(self, request):
+        id1 = request.GET.get('id', None)
+        Productos.objects.get(id=id1).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
+    
+def Productos_visualizar(request,id):
+    template_name = "Visualizar_productos.html"
+    producto=Productos.objects.get(id=id)
+    color=Color.objects.filter(est_color=True)
+    categoria=Categorias.objects.filter(est_cat=True)
+    proveedor=Proveedores.objects.filter(est_prov=True)
+    marca=Marca.objects.filter(est_marca=True)
+    presentacion=Presentacion.objects.filter(est_pre=True)
+
+    #Seleccionado el color para mostrarla en el Combo
+    colors=Color.objects.get(id=producto.color_prod.id)
+    categorias=Categorias.objects.get(id=producto.cat_prod.id)
+    proveedores=Proveedores.objects.get(id=producto.prov_prod.id)
+    marcas=Marca.objects.get(id=producto.marca_prod.id)
+    presentacions=Presentacion.objects.get(id=producto.present_prod.id)
+    
+    context = {"productos":producto,
+               "Colores":color,
+               "Categorias":categoria,
+               "Proveedores":proveedor,
+               "Marcas":marca,
+               "Presentacion":presentacion,
+               "colorseleccionado":colors.nom_color,
+               "categoriaseleccionado":categorias.nom_cat,
+               "proveedorseleccionado":proveedores.nom_prov,
+               "marcaseleccionado":marcas.nom_marca,
+               "presentacionseleccionado":presentacions.nom_pre
+               }
+    return render(request, template_name,context)    
+
+def UpdateCrudProductos(request):
+    response_data = {}
+    template_name="Visualizar_productos.html"
+    if request.POST.get('action') =='actualizar_productos':
+        try:
+            id=request.POST.get('id')
+            productos = Productos.objects.get(id=id)
+            productos.nom_prod=request.POST.get('txtnomprod')
+            productos.cod_barra_prod=request.POST.get('txtcodbarra')
+            productos.nom_etiqueta_prod=request.POST.get('txtetiqueta')
+            productos.des_prod=request.POST.get('txtdescripcion')
+            productos.umedida_prod=request.POST.get('txtumedida')
+            productos.ubicacion=request.POST.get('txtubicacion')
+            color_producto = request.POST.get('cmbcolor')
+            if color_producto=="":
+                color=productos.color_prod
+            else:
+                color=Color.objects.get(id=color_producto)
+            productos.color_prod=color
+
+            categoria_producto = request.POST.get('cmbcategoria')
+            
+            if categoria_producto=="":
+                categoria=productos.cat_prod
+            else:
+                categoria=Categorias.objects.get(id=categoria_producto)
+            productos.cat_prod=categoria
+            
+            proveedor_producto = request.POST.get('cmbproveedores')
+            if proveedor_producto =="":
+                provee=productos.prov_prod
+            else:    
+                provee=Proveedores.objects.get(id=proveedor_producto)
+            productos.prov_prod=provee
+            
+
+            marca_producto = request.POST.get('cmbmarca')
+            if marca_producto=="":
+                marca=productos.marca_prod
+            else:
+                marca=Marca.objects.get(id=marca_producto)
+            productos.marca_prod=marca
+
+            presentacion_producto = request.POST.get('cmbpresentacion')
+            if presentacion_producto=="":
+                presentacion=productos.present_prod
+            else:
+                presentacion=Presentacion.objects.get(id=presentacion_producto)
+            productos.present_prod=presentacion
+
+            file = request.FILES.get('imgprod')
+            if file:
+                productos.img_prod=file
+
+            productos.save()
+        except Exception as error:
+            response_data['flag'] = False
+            response_data['msg'] = f'No Se Modifico el Productos Correctamente {error}'
+        else:
+            response_data['flag'] = True
+            response_data['msg'] = 'Se Modifico con exito el Producto'  
             
              
         return JsonResponse(response_data)   
